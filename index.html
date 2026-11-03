@@ -355,6 +355,19 @@
 
 
     <script>
+
+// Регистрируем Service Worker для полной автономности в оффлайне
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/NanIdea/sw.js')
+      .then(reg => console.log('Оффлайн-режим успешно активирован!'))
+      .catch(err => console.log('Ошибка активации оффлайна:', err));
+  });
+}
+
+
+
+        
         let notes = [];
         let currentIndex = -1;
 
@@ -737,14 +750,6 @@ viewport.addEventListener('wheel', (e) => {
         initApp();
 
 
-// Регистрируем Service Worker для полной автономности в оффлайне
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/NanIdea/sw.js')
-      .then(reg => console.log('Оффлайн-режим успешно активирован!'))
-      .catch(err => console.log('Ошибка активации оффлайна:', err));
-  });
-}
 
 
 
