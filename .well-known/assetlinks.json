@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "io.github.reasoninthinking.twa",
-        "sha256_cert_fingerprints": ["5E:6D:75:D1:00:F6:D4:FB:C3:EB:04:07:F6:96:9C:D7:AD:BD:E0:3D:C5:23:44:AE:63:A6:92:8B:4B:8A:9D:19"]
+        "sha256_cert_fingerprints": ["CD:0C:2F:19:A6:5D:2E:30:04:C8:16:CE:A4:EE:80:EA:BC:0B:59:69:2C:6C:D5:58:5A:16:5C:0D:D8:4A:77:8D"]
       }
     }]
