@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.reasoninthinking.twa",
+        "sha256_cert_fingerprints": ["BB:E1:35:64:BC:B5:A2:69:EF:08:C3:EF:1B:E0:D3:E1:48:C4:06:E3:F3:80:7E:27:21:0F:E2:F2:B5:FD:39:4A"]
+      }
+    }]
