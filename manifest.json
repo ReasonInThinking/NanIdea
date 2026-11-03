@@ -4,9 +4,9 @@
   "display": "standalone",
   "name": "NAN IDEA",
   "orientation": "any",
-  "scope": "/NanIdea/",
+  "scope": "./",
   "short_name": "NanIdea",
-  "start_url": "https://reasoninthinking.github.io/NanIdea/index.html",
+  "start_url": "index.html",
   "theme_color": "#090a0f",
   "lang": "ru",
   "icons": [
@@ -21,14 +21,6 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
-    }
-  ],
-  "scope_extensions": [
-    {
-      "origin": "https://*.github.com"
-    },
-    {
-      "origin": "https://github.com"
     }
   ]
 }
