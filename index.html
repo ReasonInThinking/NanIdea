@@ -737,15 +737,14 @@ viewport.addEventListener('wheel', (e) => {
         initApp();
 
 
-// --- РЕГИСТРАЦИЯ СЕРВИС-ВОРКЕРА ДЛЯ РАБОТЫ ОФФЛАЙН ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        // Указываем путь к созданному файлу sw.js
-        navigator.serviceWorker.register('/NanIdea/sw.js')
-            .then((reg) => console.log('Service Worker успешно зарегистрирован!', reg.scope))
-            .catch((err) => console.error('Ошибка регистрации Service Worker:', err));
+        navigator.serviceWorker.register('sw.js') // Без /NanIdea/ на входе!
+            .then((reg) => console.log('Успешная регистрация SW!', reg.scope))
+            .catch((err) => console.error('Ошибка SW:', err));
     });
 }
+
 
 
         
