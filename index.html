@@ -737,13 +737,15 @@ viewport.addEventListener('wheel', (e) => {
         initApp();
 
 
+// Регистрируем Service Worker для полной автономности в оффлайне
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js') // Без /NanIdea/ на входе!
-            .then((reg) => console.log('Успешная регистрация SW!', reg.scope))
-            .catch((err) => console.error('Ошибка SW:', err));
-    });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/NanIdea/sw.js')
+      .then(reg => console.log('Оффлайн-режим успешно активирован!'))
+      .catch(err => console.log('Ошибка активации оффлайна:', err));
+  });
 }
+
 
 
 
