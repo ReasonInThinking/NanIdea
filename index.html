@@ -735,6 +735,20 @@ viewport.addEventListener('wheel', (e) => {
         // Полный запуск приложения
         updateOnlineStatus();
         initApp();
+
+
+// --- РЕГИСТРАЦИЯ СЕРВИС-ВОРКЕРА ДЛЯ РАБОТЫ ОФФЛАЙН ---
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        // Указываем путь к созданному файлу sw.js
+        navigator.serviceWorker.register('/NanIdea/sw.js')
+            .then((reg) => console.log('Service Worker успешно зарегистрирован!', reg.scope))
+            .catch((err) => console.error('Ошибка регистрации Service Worker:', err));
+    });
+}
+
+
+        
     </script>
 </body>
 </html>
