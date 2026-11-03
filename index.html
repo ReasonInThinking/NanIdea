@@ -20,7 +20,9 @@
         body {
             background-color: #090a0f;
             color: #f5f6fa;
+            /* Использование dynamic vh (dvh) решает проблему адаптации под мобильные шторки */
             height: 100vh;
+            height: 100dvh;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -31,9 +33,11 @@
             width: 100%;
             max-width: 480px;
             height: 100vh;
+            height: 100dvh;
             display: flex;
             flex-direction: column;
-            padding: 20px;
+            /* Учет безопасных зон для безрамочных смартфонов (iPhone с "челками") */
+            padding: calc(20px + env(safe-area-inset-top, 0px)) 20px calc(20px + env(safe-area-inset-bottom, 0px)) 20px;
             position: relative;
             z-index: 1;
         }
@@ -44,6 +48,7 @@
             align-items: center;
             padding-bottom: 15px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0; /* Шапка не будет сжиматься */
         }
 
         .counter {
@@ -69,8 +74,9 @@
             display: flex;
             align-items: center;
             position: relative;
-            margin: 20px 0;
+            margin: 15px 0;
             width: 100%;
+            min-height: 0; /* Позволяет контейнеру корректно сжиматься внутри flex */
         }
 
         .nav-btn {
@@ -104,6 +110,8 @@
             line-height: 1.5;
             position: absolute;
             z-index: 1;
+            width: 100%;
+            padding: 0 10px;
         }
 
         .note-card {
@@ -138,6 +146,7 @@
             outline: none;
             overflow-y: auto;
             display: block !important;
+            min-height: 0; /* Исправление бага растягивания текстовых полей */
         }
 
         .note-footer {
@@ -147,6 +156,7 @@
             margin-top: 15px;
             padding-top: 15px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
         }
 
         .note-date {
@@ -161,116 +171,115 @@
         }
 
         .priority-container {
-            display: none;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .priority-badge {
-            font-size: 0.7rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            padding: 3px 8px;
-            border-radius: 6px;
-            width: max-content;
-        }
-        .days-left {
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
+          display: none;
+          flex-direction: column;
+          gap: 4px;
+      }
+      .priority-badge {
+          font-size: 0.7rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          padding: 3px 8px;
+          border-radius: 6px;
+          width: max-content;
+      }
+      .days-left {
+          font-size: 0.75rem;
+          font-weight: 500;
+      }
 
-        /* 🔴 КРАСНЫЙ: Дедлайн сегодня */
-        .note-card.deadline-today {
-            border-color: rgba(231, 76, 60, 0.4);
-            background: linear-gradient(180deg, #12141c 0%, rgba(231, 76, 60, 0.04) 100%);
-        }
-        .note-card.deadline-today .priority-container { display: flex; }
-        .note-card.deadline-today .priority-badge { background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.3); }
-        .note-card.deadline-today .days-left { color: #e74c3c; }
+      /* 🔴 КРАСНЫЙ: Дедлайн сегодня */
+      .note-card.deadline-today {
+          border-color: rgba(231, 76, 60, 0.4);
+          background: linear-gradient(180deg, #12141c 0%, rgba(231, 76, 60, 0.04) 100%);
+      }
+      .note-card.deadline-today .priority-container { display: flex; }
+      .note-card.deadline-today .priority-badge { background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.3); }
+      .note-card.deadline-today .days-left { color: #e74c3c; }
 
-        /* 🟠 ОРАНЖЕВЫЙ: осталось 1-3 дня */
-        .note-card.deadline-urgent {
-            border-color: rgba(230, 126, 34, 0.4);
-            background: linear-gradient(180deg, #12141c 0%, rgba(230, 126, 34, 0.03) 100%);
-        }
-        .note-card.deadline-urgent .priority-container { display: flex; }
-        .note-card.deadline-urgent .priority-badge { background: rgba(230, 126, 34, 0.15); color: #e67e22; border: 1px solid rgba(230, 126, 34, 0.3); }
-        .note-card.deadline-urgent .days-left { color: #e67e22; }
+      /* 🟠 ОРАНЖЕВЫЙ: осталось 1-3 дня */
+      .note-card.deadline-urgent {
+          border-color: rgba(230, 126, 34, 0.4);
+          background: linear-gradient(180deg, #12141c 0%, rgba(230, 126, 34, 0.03) 100%);
+      }
+      .note-card.deadline-urgent .priority-container { display: flex; }
+      .note-card.deadline-urgent .priority-badge { background: rgba(230, 126, 34, 0.15); color: #e67e22; border: 1px solid rgba(230, 126, 34, 0.3); }
+      .note-card.deadline-urgent .days-left { color: #e67e22; }
 
-        /* 🟢 ЗЕЛЕНЫЙ: осталось 4-5 дней */
-        .note-card.deadline-safe {
-            border-color: rgba(46, 204, 113, 0.35);
-            background: linear-gradient(180deg, #12141c 0%, rgba(46, 204, 113, 0.02) 100%);
-        }
-        .note-card.deadline-safe .priority-container { display: flex; }
-        .note-card.deadline-safe .priority-badge { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); }
-        .note-card.deadline-safe .days-left { color: #2ecc71; }
+      /* 🟢 ЗЕЛЕНЫЙ: осталось 4-5 дней */
+      .note-card.deadline-safe {
+          border-color: rgba(46, 204, 113, 0.35);
+          background: linear-gradient(180deg, #12141c 0%, rgba(46, 204, 113, 0.02) 100%);
+      }
+      .note-card.deadline-safe .priority-container { display: flex; }
+      .note-card.deadline-safe .priority-badge { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); }
+      .note-card.deadline-safe .days-left { color: #2ecc71; }
 
-        .controls-panel {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            z-index: 10;
-        }
+      .controls-panel {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: 15px;
+          border-top: 1px solid rgba(255, 255, 255, 0.05);
+          z-index: 10;
+          flex-shrink: 0; /* Фиксирует нижнюю панель от сжатия клавиатурой */
+      }
 
-        .control-btn {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            color: #f5f6fa;
-            width: 54px;
-            height: 54px;
-            border-radius: 18px;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 11;
-        }
-        .control-btn svg { fill: currentColor; width: 20px; height: 20px; }
-        .control-btn:active { transform: scale(0.95); }
+      .control-btn {
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          color: #f5f6fa;
+          width: 54px;
+          height: 54px;
+          border-radius: 18px;
+          cursor: pointer;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 11;
+          flex-shrink: 0;
+      }
+      .control-btn svg { fill: currentColor; width: 20px; height: 20px; }
+      .control-btn:active { transform: scale(0.95); }
 
-        .add-btn {
-            background: #2ecc71;
-            color: #090a0f;
-            border: none;
-            width: 64px;
-            height: 64px;
-            border-radius: 22px;
-            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2);
-        }
-        .add-btn svg { width: 24px; height: 24px; }
+      .add-btn {
+          background: #2ecc71;
+          color: #090a0f;
+          border: none;
+          width: 64px;
+          height: 64px;
+          border-radius: 22px;
+          box-shadow: 0 4px 15px rgba(46, 204, 113, 0.2);
+          flex-shrink: 0;
+      }
+      .add-btn svg { width: 24px; height: 24px; }
 
-        .speech-btn.listening {
-            background: #e74c3c;
-            color: #fff;
-            border-color: #e74c3c;
-            animation: pulse 1.5s infinite;
-        }
+      .speech-btn.listening {
+          background: #e74c3c;
+          color: #fff;
+          border-color: #e74c3c;
+          animation: pulse 1.5s infinite;
+      }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
-        }
+      @keyframes pulse {
+          0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4); }
+          70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+      }
 
-        @media (max-width: 600px) { .nav-btn { display: none; } }
-    </style>
-</head>
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NanNote</title>
-</head>
-<body>
+      @media (max-width: 600px) {
+          .nav-btn { display: none; }
+      }
+  </style>
 
-    <div class="app-container">
-        <!-- Верхняя панель с новым логотипом Ахинеус и SVG -->
-        <header class="app-header">
-            <div class="brand-wrapper" style="display: flex; align-items: center; gap: 10px;">
-           <!-- Красивая белая SVG иконка капли с импульсом -->
+  <body>
+
+      <div class="app-container">
+          <!-- Верхняя панель с логотипом NanIdea и геометрическим кристалом -->
+          <header class="app-header">
+              <div class="brand-wrapper" style="display: flex; align-items: center; gap: 10px;">
+                  <!-- Исправлена ссылка пространства имен xmlns для корректного отображения иконки -->
+                  <!-- Красивая белая SVG иконка капли с импульсом -->
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org" style="color: #ffffff;">
     <!-- Контур капли -->
     <path d="M12 2C12 2 4 9 4 14C4 18.4183 7.58172 22 12 22C16.4183 22 20 18.4183 20 14C20 9 12 2 12 2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -281,363 +290,394 @@
     <circle cx="12" cy="14" r="1.5" fill="currentColor"/>
 </svg>
 
+                  <h1 class="logo-title" style="font-size: 1.3rem; font-weight: 600; color: #ffffff; letter-spacing: -0.5px; margin: 0;">NanIdea</h1>
+              </div>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                  <span class="counter" id="note-counter">0 из 0</span>
+                  <div id="online-status" class="status-dot online"></div>
+              </div>
+          </header>
 
-                <h1 class="logo-title" style="font-size: 1.3rem; font-weight: 600; color: #ffffff; letter-spacing: -0.5px; margin: 0;">NanIdea</h1>
-            </div>
-            <div style="display: flex; align-items: center; gap: 12px;">
-                <span class="counter" id="note-counter">0 из 0</span>
-                <div id="online-status" class="status-dot online"></div>
-            </div>
-        </header>
+          <!-- Главный слайдер заметок -->
+          <main class="slider-container">
+              <button class="nav-btn" id="prev-btn" aria-label="Предыдущая заметка">
+                  <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+              </button>
 
-        <main class="slider-container">
-            <button class="nav-btn" id="prev-btn">
-                <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
-            </button>
+              <div class="notes-viewport" id="notes-viewport">
+                  <div class="no-notes" id="no-notes-placeholder">
+                      У вас пока нет заметок.<br>Нажмите «+», чтобы создать первую!
+                  </div>
+              </div>
 
-            <div class="notes-viewport" id="notes-viewport">
-                <div class="no-notes" id="no-notes-placeholder">
-                    У вас пока нет заметок.<br>Нажмите «+», чтобы создать первую!
-                </div>
-            </div>
+              <button class="nav-btn" id="next-btn" aria-label="Следующая заметка">
+                  <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+              </button>
+          </main>
 
-            <button class="nav-btn" id="next-btn">
-                <svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
-            </button>
-        </main>
-
-        <footer class="controls-panel">
-            <button class="control-btn speech-btn" id="voice-btn">
-                <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
-            </button>
-            <button class="control-btn add-btn" id="add-note-btn">
-                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-            </button>
-            <button class="control-btn" id="delete-note-btn">
-                <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
-            </button>
-        </footer>
-    </div>
+          <!-- Панель управления (зафиксирована снизу) -->
+          <footer class="controls-panel">
+              <button class="control-btn speech-btn" id="voice-btn" title="Диктовать текст">
+                  <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+              </button>
+              <button class="control-btn add-btn" id="add-note-btn" title="Добавить новую заметку">
+                  <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+              </button>
+              <button class="control-btn" id="delete-note-btn" title="Удалить заметку">
+                  <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+              </button>
+          </footer>
+      </div>
 
 
-    <script>
-        let notes = [];
-        let currentIndex = -1;
+      <script>
+      // Основной массив данных и текущий индекс активной карточки
+      let notes = [];
+      let currentIndex = -1;
 
-        const viewport = document.getElementById('notes-viewport');
-        const counter = document.getElementById('note-counter');
-        const placeholder = document.getElementById('no-notes-placeholder');
+      // Ссылки на ключевые элементы интерфейса
+      const viewport = document.getElementById('notes-viewport');
+      const counter = document.getElementById('note-counter');
+      const placeholder = document.getElementById('no-notes-placeholder');
 
-        function initApp() {
-            try {
-                const savedNotes = localStorage.getItem('ideaspace_notes');
-                if (savedNotes) notes = JSON.parse(savedNotes);
-            } catch (e) {
-                console.error(e);
-            }
-            sortAndRender(true);
+      // Инициализация приложения и загрузка сохраненных данных
+      function initApp() {
+          try {
+              const savedNotes = localStorage.getItem('ideaspace_notes');
+              if (savedNotes) {
+                  notes = JSON.parse(savedNotes);
+              }
+          } catch (e) {
+              console.error("Ошибка чтения LocalStorage:", e);
+          }
+          sortAndRender(true);
+      }
+
+      // Синхронизация данных с локальным хранилищем браузера
+      function saveToStorage() {
+          try {
+              localStorage.setItem('ideaspace_notes', JSON.stringify(notes));
+          } catch (e) {
+              console.error("Ошибка записи в LocalStorage:", e);
+          }
+      }
+
+      // Функция точного подсчета дней, оставшихся до наступления даты дедлайна
+      function getDaysLeft(dateString) {
+          if (!dateString) return null;
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
+          const targetDate = new Date(dateString);
+          targetDate.setHours(0, 0, 0, 0);
+
+          // Если дата введена некорректно, возвращаем null
+          if (isNaN(targetDate.getTime())) return null;
+
+          const diffTime = targetDate - today;
+          return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      }
+
+      // Функция автоматического ранжирования заметок по их приоритетности
+      function sortNotes() {
+          notes.sort((a, b) => {
+              const daysA = getDaysLeft(a.date);
+              const daysB = getDaysLeft(b.date);
+
+              // Заметка приоритетна, если до дедлайна от 0 до 5 дней
+              const isPriorityA = daysA !== null && daysA >= 0 && daysA <= 5;
+              const isPriorityB = daysB !== null && daysB >= 0 && daysB <= 5;
+
+              // 1. Приоритетные карточки поднимаются наверх списка
+              if (isPriorityA && !isPriorityB) return -1;
+              if (!isPriorityA && isPriorityB) return 1;
+
+              // 2. Внутри группы приоритетных сортируем по срочности (ближайшие выше)
+              if (isPriorityA && isPriorityB) return daysA - daysB;
+
+              // 3. Обычные заметки сортируются по времени создания (новые выше)
+              return (b.id || 0) - (a.id || 0);
+          });
+      }
+
+
+      function sortAndRender(resetToFirst = false) {
+        const activeNoteId = currentIndex !== -1 && notes[currentIndex] ? notes[currentIndex].id : null;
+        sortNotes();
+
+        if (resetToFirst || activeNoteId === null) {
+            currentIndex = notes.length > 0 ? 0 : -1;
+        } else {
+            const foundIndex = notes.findIndex(n => n.id === activeNoteId);
+            currentIndex = foundIndex !== -1 ? foundIndex : (notes.length > 0 ? 0 : -1);
+        }
+        render();
+    }
+
+    function render() {
+        const oldCards = viewport.querySelectorAll('.note-card');
+        oldCards.forEach(c => c.remove());
+
+        if (notes.length === 0) {
+            placeholder.style.display = 'block';
+            counter.textContent = '0 из 0';
+            currentIndex = -1;
+            return;
         }
 
-        function saveToStorage() {
-            try {
-                localStorage.setItem('ideaspace_notes', JSON.stringify(notes));
-            } catch (e) {
-                console.error(e);
-            }
-        }
+        placeholder.style.display = 'none';
+        counter.textContent = `${currentIndex + 1} из ${notes.length}`;
 
-        function getDaysLeft(dateString) {
-            if (!dateString) return null;
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const targetDate = new Date(dateString);
-            targetDate.setHours(0, 0, 0, 0);
-            return Math.ceil((targetDate - today) / (1000 * 60 * 60 * 24));
-        }
+        notes.forEach((note, index) => {
+            const card = document.createElement('div');
+            card.className = 'note-card';
 
-        function sortNotes() {
-            notes.sort((a, b) => {
-                const daysA = getDaysLeft(a.date);
-                const daysB = getDaysLeft(b.date);
+            const daysLeft = getDaysLeft(note.date);
+            let textDays = '';
 
-                const isPriorityA = daysA !== null && daysA >= 0 && daysA <= 5;
-                const isPriorityB = daysB !== null && daysB >= 0 && daysB <= 5;
-
-                if (isPriorityA && !isPriorityB) return -1;
-                if (!isPriorityA && isPriorityB) return 1;
-
-                if (isPriorityA && isPriorityB) return daysA - daysB;
-
-                return b.id - a.id;
-            });
-        }
-
-        function sortAndRender(resetToFirst = false) {
-            const activeNoteId = currentIndex !== -1 && notes[currentIndex] ? notes[currentIndex].id : null;
-            sortNotes();
-
-            if (resetToFirst || activeNoteId === null) {
-                currentIndex = notes.length > 0 ? 0 : -1;
-            } else {
-                const foundIndex = notes.findIndex(n => n.id === activeNoteId);
-                currentIndex = foundIndex !== -1 ? foundIndex : (notes.length > 0 ? 0 : -1);
-            }
-            render();
-        }
-
-        function render() {
-            const oldCards = viewport.querySelectorAll('.note-card');
-            oldCards.forEach(c => c.remove());
-
-            if (notes.length === 0) {
-                placeholder.style.display = 'block';
-                counter.textContent = '0 из 0';
-                currentIndex = -1;
-                return;
-            }
-
-            placeholder.style.display = 'none';
-            counter.textContent = `${currentIndex + 1} из ${notes.length}`;
-
-            notes.forEach((note, index) => {
-                const card = document.createElement('div');
-                card.className = 'note-card';
-
-                const daysLeft = getDaysLeft(note.date);
-                let textDays = '';
-
-                // Проверяем условия и присваиваем соответствующий цветовой класс
-                if (daysLeft !== null && daysLeft >= 0 && daysLeft <= 5) {
-                    if (daysLeft === 0) {
-                        card.classList.add('deadline-today'); // Красный
-                        textDays = 'Дедлайн сегодня!';
-                    } else if (daysLeft >= 1 && daysLeft <= 3) {
-                        card.classList.add('deadline-urgent'); // Оранжевый
-                        textDays = `Осталось: ${daysLeft} дн.`;
-                    } else if (daysLeft >= 4 && daysLeft <= 5) {
-                        card.classList.add('deadline-safe'); // Зеленый
-                        textDays = `Осталось: ${daysLeft} дн.`;
-                    }
+            if (daysLeft !== null && daysLeft >= 0 && daysLeft <= 5) {
+                if (daysLeft === 0) {
+                    card.classList.add('deadline-today');
+                    textDays = 'Дедлайн сегодня!';
+                } else if (daysLeft >= 1 && daysLeft <= 3) {
+                    card.classList.add('deadline-urgent');
+                    textDays = `Осталось: ${daysLeft} дн.`;
+                } else if (daysLeft >= 4 && daysLeft <= 5) {
+                    card.classList.add('deadline-safe');
+                    textDays = `Осталось: ${daysLeft} дн.`;
                 }
+            }
 
-                if (index === currentIndex) card.classList.add('active');
-                else if (index < currentIndex) card.classList.add('left');
-                else card.classList.add('right');
+            if (index === currentIndex) card.classList.add('active');
+            else if (index < currentIndex) card.classList.add('left');
+            else card.classList.add('right');
 
-                card.innerHTML = `
-                    <textarea class="note-text" placeholder="Начните писать...">${note.text || ''}</textarea>
-                    <div class="note-footer">
-                        <div class="priority-container">
-                            <span class="priority-badge">Приоритет</span>
-                            <span class="days-left">${textDays}</span>
-                        </div>
-                        <input type="date" class="note-date" value="${note.date || ''}">
+            card.innerHTML = `
+                <textarea class="note-text" placeholder="Начните писать...">${note.text || ''}</textarea>
+                <div class="note-footer">
+                    <div class="priority-container">
+                        <span class="priority-badge">Приоритет</span>
+                        <span class="days-left">${textDays}</span>
                     </div>
-                `;
+                    <input type="date" class="note-date" value="${note.date || ''}">
+                </div>
+            `;
 
-                card.querySelector('.note-text').addEventListener('input', (e) => {
-                    notes[index].text = e.target.value;
-                    saveToStorage();
-                });
-
-                card.querySelector('.note-date').addEventListener('change', (e) => {
-                    notes[index].date = e.target.value;
-                    saveToStorage();
-                    sortAndRender(false);
-                });
-
-                viewport.appendChild(card);
+            card.querySelector('.note-text').addEventListener('input', (e) => {
+                notes[index].text = e.target.value;
+                saveToStorage();
             });
+
+            card.querySelector('.note-date').addEventListener('change', (e) => {
+                notes[index].date = e.target.value;
+                saveToStorage();
+                sortAndRender(false);
+            });
+
+            viewport.appendChild(card);
+        });
+    }
+
+    document.getElementById('add-note-btn').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        const newNote = { id: Date.now(), text: '', date: '' };
+        notes.push(newNote);
+        sortAndRender(false);
+        currentIndex = notes.findIndex(n => n.id === newNote.id);
+        render();
+        saveToStorage();
+        setTimeout(() => {
+            const txt = viewport.querySelector('.note-card.active .note-text');
+            if (txt) txt.focus();
+        }, 50);
+    });
+
+    document.getElementById('delete-note-btn').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        if (currentIndex === -1) return;
+        notes.splice(currentIndex, 1);
+        if (currentIndex >= notes.length) currentIndex = notes.length - 1;
+        render();
+        saveToStorage();
+    });
+
+    document.getElementById('prev-btn').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        if (currentIndex > 0) {
+            currentIndex--;
+            render();
         }
+    });
 
-        document.getElementById('add-note-btn').addEventListener('pointerdown', (e) => {
-            e.preventDefault();
-            const newNote = { id: Date.now(), text: '', date: '' };
-            notes.push(newNote);
-            sortAndRender(false);
-            currentIndex = notes.findIndex(n => n.id === newNote.id);
+    document.getElementById('next-btn').addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        if (currentIndex < notes.length - 1) {
+            currentIndex++;
             render();
-            saveToStorage();
-            setTimeout(() => {
-                const txt = viewport.querySelector('.note-card.active .note-text');
-                if (txt) txt.focus();
-            }, 50);
-        });
+        }
+    });
 
-        document.getElementById('delete-note-btn').addEventListener('pointerdown', (e) => {
-            e.preventDefault();
-            if (currentIndex === -1) return;
-            notes.splice(currentIndex, 1);
-            if (currentIndex >= notes.length) currentIndex = notes.length - 1;
-            render();
-            saveToStorage();
-        });
+    // --- ЖЕСТЫ СВАЙПА ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ ---
+    let touchStartX = 0;
+    let touchStartY = 0;
 
-        document.getElementById('prev-btn').addEventListener('pointerdown', (e) => {
-            e.preventDefault();
-            if (currentIndex > 0) {
+    viewport.addEventListener('touchstart', (e) => {
+        if (e.changedTouches && e.changedTouches[0]) {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', (e) => {
+        if (!e.changedTouches || !e.changedTouches[0]) return;
+        const deltaX = e.changedTouches[0].screenX - touchStartX;
+        const deltaY = e.changedTouches[0].screenY - touchStartY;
+
+        if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
+            if (deltaX > 0 && currentIndex > 0) {
                 currentIndex--;
                 render();
-            }
-        });
-
-        document.getElementById('next-btn').addEventListener('pointerdown', (e) => {
-            e.preventDefault();
-            if (currentIndex < notes.length - 1) {
+            } else if (deltaX < 0 && currentIndex < notes.length - 1) {
                 currentIndex++;
                 render();
             }
-        });
+        }
+    }, { passive: true });
 
 
-        let touchStartX = 0;
-        let touchStartY = 0;
 
-        viewport.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches.screenX;
-            touchStartY = e.changedTouches.screenY;
-        }, { passive: true });
 
-        viewport.addEventListener('touchend', (e) => {
-            const deltaX = e.changedTouches.screenX - touchStartX;
-            const deltaY = e.changedTouches.screenY - touchStartY;
+    // --- ИСПРАВЛЕННЫЙ ГОЛОСОВОЙ ВВОД (WEB SPEECH API) ---
+    const voiceBtn = document.getElementById('voice-btn');
+    const statusDot = document.getElementById('online-status');
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition = null;
+    let isListening = false;
+    let forceStopped = false;
 
-            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 40) {
-                if (deltaX > 0 && currentIndex > 0) {
-                    currentIndex--;
-                    render();
-                } else if (deltaX < 0 && currentIndex < notes.length - 1) {
-                    currentIndex++;
-                    render();
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'ru-RU';
+
+        recognition.onresult = (event) => {
+            if (currentIndex === -1 || !event || !event.results) return;
+            let resultText = '';
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i] && event.results[i][0] && event.results[i][0].transcript) {
+                    resultText += event.results[i][0].transcript;
                 }
             }
-        }, { passive: true });
+            const textarea = viewport.querySelector('.note-card.active .note-text');
+            if (textarea && resultText) {
+                const space = textarea.value.trim().length > 0 ? ' ' : '';
+                textarea.value = textarea.value.trim() + space + resultText.trim();
+                notes[currentIndex].text = textarea.value;
+                saveToStorage();
+            }
+        };
 
+        recognition.onerror = (event) => {
+            // Полная защита от undefined на любых смартфонах
+            const errorType = (event && event.error) ? event.error : 'unknown';
+            console.warn('Speech recognition error:', errorType);
 
-        const voiceBtn = document.getElementById('voice-btn');
-        const statusDot = document.getElementById('online-status');
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        let recognition = null;
-        let isListening = false;
-        let forceStopped = false;
-
-        if (SpeechRecognition) {
-            recognition = new SpeechRecognition();
-            recognition.continuous = false;
-            recognition.interimResults = false;
-            recognition.lang = 'ru-RU';
-
-            recognition.onresult = (event) => {
-                if (currentIndex === -1) return;
-                let resultText = '';
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) resultText += event.results[i].transcript;
-                }
-                const textarea = viewport.querySelector('.note-card.active .note-text');
-                if (textarea && resultText) {
-                    const space = textarea.value.trim().length > 0 ? ' ' : '';
-                    textarea.value = textarea.value.trim() + space + resultText.trim();
-                    notes[currentIndex].text = textarea.value;
-                    saveToStorage();
-                }
-            };
-
-            recognition.onerror = (event) => {
-                // Если возникла любая ошибка (оффлайн или блокировка на file://) — просто гасим микрофон и уводим в клавиатуру
-                if (event.error === 'network' || event.error === 'not-allowed') {
-                    statusDot.className = 'status-dot offline';
-                    stopListening();
-                    switchToKeyboard();
-                }
-                else if (event.error === 'no-speech') {
-                    if (isListening && !forceStopped) {
-                        try { recognition.start(); } catch(e) {}
-                    }
-                } else {
-                    stopListening();
-                }
-            };
-
-            recognition.onend = () => {
+            if (errorType === 'network' || errorType === 'not-allowed') {
+                statusDot.className = 'status-dot offline';
+                stopListening();
+                switchToKeyboard();
+            } else if (errorType === 'no-speech') {
                 if (isListening && !forceStopped) {
-                    try { recognition.start(); } catch (e) { stopListening(); }
-                } else {
-                    stopListening();
+                    try { recognition.start(); } catch(e) {}
                 }
-            };
+            } else {
+                stopListening();
+            }
+        };
+
+        recognition.onend = () => {
+            if (isListening && !forceStopped) {
+                try { recognition.start(); } catch (e) { stopListening(); }
+            } else {
+                stopListening();
+            }
+        };
+    }
+
+    voiceBtn.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+
+        if (window.location.protocol === 'file:' || !recognition || !navigator.onLine) {
+            statusDot.className = 'status-dot offline';
+            switchToKeyboard();
+            return;
         }
 
-        voiceBtn.addEventListener('pointerdown', (e) => {
-            e.preventDefault();
-
-            // Если запуск с диска или нет поддержки Speech API — мягко открываем клавиатуру
-            if (window.location.protocol === 'file:' || !recognition || !navigator.onLine) {
-                statusDot.className = 'status-dot offline';
-                switchToKeyboard();
-                return;
+        if (isListening) {
+            forceStopped = true;
+            recognition.stop();
+            stopListening();
+        } else {
+            forceStopped = false;
+            if (currentIndex === -1) {
+                const newNote = { id: Date.now(), text: '', date: '' };
+                notes.push(newNote);
+                sortAndRender(true);
             }
+            try {
+                const textarea = viewport.querySelector('.note-card.active .note-text');
+                if (textarea) textarea.focus();
+                recognition.start();
+                isListening = true;
+                voiceBtn.classList.add('listening');
+            } catch (err) {
+                stopListening();
+            }
+        }
+    });
 
-            if (isListening) {
+    function stopListening() {
+        isListening = false;
+        voiceBtn.classList.remove('listening');
+    }
+
+    function switchToKeyboard() {
+        if (currentIndex === -1) {
+            const newNote = { id: Date.now(), text: '', date: '' };
+            notes.push(newNote);
+            currentIndex = 0;
+            render();
+        }
+        setTimeout(() => {
+            const textarea = viewport.querySelector('.note-card.active .note-text');
+            if (textarea) {
+                textarea.focus();
+                textarea.scrollTop = textarea.scrollHeight;
+            }
+        }, 50);
+    }
+
+    function updateOnlineStatus() {
+        const isOnline = typeof navigator.onLine !== 'undefined' ? navigator.onLine : true;
+        if (isOnline) {
+            statusDot.className = 'status-dot online';
+        } else {
+            statusDot.className = 'status-dot offline';
+            if (isListening && recognition) {
                 forceStopped = true;
                 recognition.stop();
-                stopListening();
-            } else {
-                forceStopped = false;
-                if (currentIndex === -1) {
-                    const newNote = { id: Date.now(), text: '', date: '' };
-                    notes.push(newNote);
-                    sortAndRender(true);
-                }
-                try {
-                    const textarea = viewport.querySelector('.note-card.active .note-text');
-                    if (textarea) textarea.focus();
-                    recognition.start();
-                    isListening = true;
-                    voiceBtn.classList.add('listening');
-                } catch (err) {
-                    stopListening();
-                }
-            }
-        });
-
-        function stopListening() {
-            isListening = false;
-            voiceBtn.classList.remove('listening');
-        }
-
-        function switchToKeyboard() {
-            if (currentIndex === -1) {
-                notes.push({ id: Date.now(), text: '', date: '' });
-                currentIndex = 0;
-                render();
-            }
-            setTimeout(() => {
-                const textarea = viewport.querySelector('.note-card.active .note-text');
-                if (textarea) {
-                    textarea.focus();
-                    textarea.scrollTop = textarea.scrollHeight;
-                }
-            }, 50);
-        }
-
-        function updateOnlineStatus() {
-            const isOnline = typeof navigator.onLine !== 'undefined' ? navigator.onLine : true;
-            if (isOnline) {
-                statusDot.className = 'status-dot online';
-            } else {
-                statusDot.className = 'status-dot offline';
-                if (isListening && recognition) {
-                    forceStopped = true;
-                    recognition.stop();
-                }
             }
         }
+    }
 
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
 
-        updateOnlineStatus();
-        initApp();
-    </script>
+    // Финальный автоматический запуск всей логики при старте
+    updateOnlineStatus();
+    initApp();
+</script>
 </body>
 </html>
+
