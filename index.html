@@ -356,14 +356,7 @@
 
     <script>
 
-// Регистрируем Service Worker для полной автономности в оффлайне
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/NanIdea/sw.js')
-      .then(reg => console.log('Оффлайн-режим успешно активирован!'))
-      .catch(err => console.log('Ошибка активации оффлайна:', err));
-  });
-}
+
 
 
 
@@ -750,6 +743,16 @@ viewport.addEventListener('wheel', (e) => {
         initApp();
 
 
+
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      // Точка и слэш (./) указывают искать файл в текущей папке
+      navigator.serviceWorker.register('./sw.js') 
+        .then((reg) => console.log('Service Worker зарегистрирован!', reg.scope))
+        .catch((err) => console.error('Ошибка регистрации:', err));
+    });
+  }
 
 
 
