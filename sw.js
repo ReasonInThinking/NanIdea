@@ -1,9 +1,10 @@
 const CACHE_NAME = 'pulse-notes-v2';
 const ASSETS = [
-  '/NanIdea/',
-  '/NanIdea/index.html',
-  '/NanIdea/ink.png'
+  './',              // Кэширует главную страницу (корневой запрос)
+  './index.html',    // Кэширует сам файл страницы
+  './ink.png'      // Кэширует картинку (замените на имя вашей иконки, если нужно)
 ];
+
 
 // Установка: скачиваем все ресурсы
 self.addEventListener('install', (e) => {
