@@ -1,17 +1,15 @@
 const CACHE_NAME = 'pulse-notes-v2';
 const ASSETS = [
-  './',              // Кэширует главную страницу (корневой запрос)
-  './index.html',    // Кэширует сам файл страницы
-  './ink.png'      // Кэширует картинку (замените на имя вашей иконки, если нужно)
+  '/NanIdea/',              // Кэширует главную страницу (корневой запрос для GitHub Pages)
+  '/NanIdea/index.html',    // Кэширует сам файл страницы с абсолютным путем
+  '/NanIdea/ink.png'        // Кэширует картинку (проверьте имя файла: в манифесте было image.png, тут ink.png)
 ];
-
 
 // Установка: скачиваем все ресурсы
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        // Используем комбинацию, чтобы один битый файл не ломал установку
         return cache.addAll(ASSETS).catch(err => {
           console.error('Ошибка предкэширования: некоторые файлы не найдены', err);
         });
@@ -37,9 +35,9 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const url = e.request.url;
 
-  // ЗАЩИТА МИКРОФОНА И СЕТЕВЫХ ЗАПРОСОВ: пускаем напрямую в сеть (ИСПРАВЛЕНО)
+  // ЗАЩИТА МИКРОФОНА И СЕТЕВЫХ ЗАПРОСОВ: пускаем напрямую в сеть
   if (url.includes('speech') || url.includes('google.com') || url.startsWith('blob:')) {
-    return e.respondWith(fetch(e.request)); 
+    return; // Просто выходим, браузер обработает запрос стандартно через сеть
   }
 
   e.respondWith(
