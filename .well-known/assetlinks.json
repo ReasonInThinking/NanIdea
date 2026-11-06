@@ -3,6 +3,6 @@
       "target": {
         "namespace": "android_app",
         "package_name": "io.github.reasoninthinking.nanidea",
-        "sha256_cert_fingerprints": ["22:4A:D1:44:18:2F:05:26:0B:A3:5F:5A:AB:5F:58:D2:21:F3:C1:C6:64:9E:82:02:B2:1C:8B:E5:E9:7D:E9:7E"]
+        "sha256_cert_fingerprints": ["E4:F6:49:1D:A7:F7:B1:3A:76:5A:F8:20:8A:31:4A:4D:02:42:E9:4D:0A:17:EF:60:48:10:B8:44:68:45:B4:2A"]
       }
     }]
