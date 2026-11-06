@@ -2,7 +2,7 @@
 
 
 
-Вот возникла идея, мысль, заметка. Хочется куда-то быстро записать информацию, дабы не забыть ее. Как вариант использовать NanIdea -> Веб-версия [Click](https://reasoninthinking.github.io/NanIdea/) | Мобильная версия [Click](https://github.com/ReasonInThinking/NanIdea/blob/main/NanIdea.apk)
+Вот возникла идея, мысль, заметка. Хочется куда-то быстро записать информацию, дабы не забыть ее. Как вариант использовать NanIdea -> Веб-версия [Click](https://reasoninthinking.github.io/NanIdea/) | Мобильная версия apk файл [Click](https://github.com/ReasonInThinking/NanIdea/blob/main/NanIdea.apk) 
 
 ## Мобильная версия
 
