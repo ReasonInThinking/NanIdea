@@ -1,23 +1,25 @@
 {
-  "background_color": "#090a0f",
+  "name": "NanIdea",
+  "short_name": "NanIdea",
+  "lang": "ru",
   "dir": "ltr",
   "display": "standalone",
-  "name": "NAN IDEA",
   "orientation": "any",
-  "scope": "./",
-  "short_name": "NanIdea",
-  "start_url": "index.html",
+  "background_color": "#090a0f",
   "theme_color": "#090a0f",
-  "lang": "ru",
-  "icons": [
+  "scope": "/NanIdea/",
+  "start_url": "/NanIdea/",
+  "scope_extensions": [
     {
-      "src": "ink.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
+      "origin": "https://*.github.com"
     },
     {
-      "src": "ink.png",
+      "origin": "https://github.com"
+    }
+  ],
+  "icons": [
+    {
+      "src": "image.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
